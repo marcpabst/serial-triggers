@@ -32,7 +32,11 @@ impl SerialTriggerWriter {
             None => QueueBehavior::Add,
             Some("add") => QueueBehavior::Add,
             Some("discard") => QueueBehavior::Discard,
-            _ => return Err(PyValueError::new_err("Queue behavior must be 'add' or 'discard'")),
+            _ => {
+                return Err(PyValueError::new_err(
+                    "Queue behavior must be 'add' or 'discard'",
+                ))
+            }
         };
 
         // Create channel for thread communication
@@ -87,7 +91,11 @@ impl SerialTriggerWriter {
     }
 }
 
-fn process_commands(mut port: Box<dyn SerialPort>, receiver: Receiver<ThreadCommand>, queue_behavior: QueueBehavior) {
+fn process_commands(
+    mut port: Box<dyn SerialPort>,
+    receiver: Receiver<ThreadCommand>,
+    queue_behavior: QueueBehavior,
+) {
     loop {
         // Try to receive a command with timeout
         match receiver.recv_timeout(Duration::from_millis(100)) {
@@ -138,7 +146,7 @@ fn process_commands(mut port: Box<dyn SerialPort>, receiver: Receiver<ThreadComm
         }
 
         // Sleep a bit to avoid busy waiting
-        thread::sleep(Duration::from_micros(1);
+        thread::sleep(Duration::from_micros(1));
 
         // For discard behavior, we need to drain the queue
         if queue_behavior == QueueBehavior::Discard {
