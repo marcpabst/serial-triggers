@@ -1,6 +1,6 @@
 [package]
 name = "serial-triggers"
-version = "0.1.8"
+version = "0.1.9"
 edition = "2021"
 
 # do not include this package in the workspace

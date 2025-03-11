@@ -135,6 +135,13 @@ fn process_commands(
                         break;
                     }
                 }
+
+                // For discard behavior, we need to drain the queue
+                if queue_behavior == QueueBehavior::Discard {
+                    while let Ok(_command) = receiver.try_recv() {
+                        dbg!("Discarding command");
+                    }
+                }
             }
             Err(crossbeam::channel::RecvTimeoutError::Timeout) => {
                 // Continue the loop if no command was received
@@ -147,13 +154,6 @@ fn process_commands(
 
         // Sleep a bit to avoid busy waiting
         thread::sleep(Duration::from_micros(1));
-
-        // For discard behavior, we need to drain the queue
-        if queue_behavior == QueueBehavior::Discard {
-            while let Ok(_command) = receiver.try_recv() {
-                dbg!("Discarding command");
-            }
-        }
     }
 }
 
