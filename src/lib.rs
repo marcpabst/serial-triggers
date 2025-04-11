@@ -97,9 +97,9 @@ impl SerialTriggerWriter {
 
     fn __exit__(
         mut slf: PyRefMut<Self>,
-        _exc_type: Option<PyObject>,
-        _exc_value: Option<PyObject>,
-        _traceback: Option<PyObject>,
+        exc_type: Bound<'_, crate::PyAny>,
+        exc_value: Bound<'_, crate::PyAny>,
+        traceback: Bound<'_, crate::PyAny>,
     ) -> PyResult<()> {
         // close the serial port
         slf.close()?;
