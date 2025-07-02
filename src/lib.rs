@@ -97,6 +97,22 @@ impl SerialTriggerWriter {
 
         Ok(port_names)
     }
+
+    fn __enter__(slf: PyRef<Self>) -> PyResult<Py<Self>> {
+        // return self
+        Ok(slf.into())
+    }
+
+    fn __exit__(
+        mut slf: PyRefMut<Self>,
+        exc_type: Bound<'_, crate::PyAny>,
+        exc_value: Bound<'_, crate::PyAny>,
+        traceback: Bound<'_, crate::PyAny>,
+    ) -> PyResult<()> {
+        // close the serial port
+        slf.close()?;
+        Ok(())
+    }
 }
 
 fn process_commands(
