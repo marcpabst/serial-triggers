@@ -4,6 +4,7 @@ use pyo3::prelude::*;
 use serialport::SerialPort;
 use std::thread;
 use std::time::{Duration, Instant};
+use thread_priority::ThreadPriority;
 
 #[derive(Clone, Copy, PartialEq)]
 enum QueueBehavior {
@@ -50,6 +51,13 @@ impl SerialTriggerWriter {
 
         // Spawn the worker thread with ownership of the port
         thread::spawn(move || {
+            // Set thread priority to Max
+            if let Err(e) = thread_priority::set_current_thread_priority(ThreadPriority::Max) {
+                eprintln!(
+                    "Failed to set thread priority: {}. Please report this issue.",
+                    e
+                );
+            }
             process_commands(port, receiver, behavior);
         });
 

@@ -1,6 +1,6 @@
 [package]
 name = "serial-triggers"
-version = "0.1.10"
+version = "0.1.11"
 edition = "2021"
 
 # do not include this package in the workspace
@@ -19,3 +19,4 @@ pyo3 = { version = "0.23.4", features = [
     "multiple-pymethods",
 ] }
 serialport = "4.7.0"
+thread-priority = "2.1.0"
